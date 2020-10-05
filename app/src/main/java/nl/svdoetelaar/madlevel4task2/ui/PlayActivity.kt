@@ -1,4 +1,4 @@
-package nl.svdoetelaar.madlevel4task2.ui.play
+package nl.svdoetelaar.madlevel4task2.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
