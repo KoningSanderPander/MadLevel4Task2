@@ -1,4 +1,4 @@
-package nl.svdoetelaar.madlevel4task2.ui
+package nl.svdoetelaar.madlevel4task2.ui.play
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,17 +6,16 @@ import android.view.Menu
 import android.view.MenuItem
 import nl.svdoetelaar.madlevel4task2.R
 
-class MainActivity : AppCompatActivity() {
+class PlayActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_play)
         setSupportActionBar(findViewById(R.id.toolbar))
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_history, menu)
         return true
     }
 
