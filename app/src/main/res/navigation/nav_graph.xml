@@ -8,5 +8,5 @@
         android:id="@+id/firstFragment"
         android:name="nl.svdoetelaar.madlevel4task2.ui.play.PlayFragment"
         android:label="fragment_first"
-        tools:layout="@layout/fragment_first" />
+        tools:layout="@layout/fragment_play" />
 </navigation>
