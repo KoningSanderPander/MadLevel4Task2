@@ -9,12 +9,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import nl.svdoetelaar.madlevel4task2.R
 import nl.svdoetelaar.madlevel4task2.databinding.FragmentPlayBinding
 import nl.svdoetelaar.madlevel4task2.model.GameMode
 import nl.svdoetelaar.madlevel4task2.model.RockPaperScissors
+import nl.svdoetelaar.madlevel4task2.model.RockPaperScissorsGame
 import nl.svdoetelaar.madlevel4task2.model.Winner
+import nl.svdoetelaar.madlevel4task2.repository.RockPaperScissorsRepository
 import java.lang.Math.floorMod
+import java.time.LocalDateTime.now
 import kotlin.random.Random
 
 /**
@@ -26,6 +33,9 @@ class PlayFragment : Fragment() {
     private var gameMode = GameMode.RANDOM
     private val aRPS = RockPaperScissors.values() //arrayOfRockPaperScissors (this is just shorter)
 
+    private val mainScope = CoroutineScope(Dispatchers.Main)
+    private lateinit var rockPaperScissorsRepository: RockPaperScissorsRepository
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,7 +45,7 @@ class PlayFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -58,11 +68,12 @@ class PlayFragment : Fragment() {
         } else {
             GameMode.RANDOM
         }
-        Toast.makeText(requireContext(), "Set gamemode to ${this.gameMode}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Set gamemode to ${this.gameMode}", Toast.LENGTH_SHORT)
+            .show()
         return true
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun play(playerRPS: RockPaperScissors) {
         when (gameMode) {
             GameMode.RANDOM -> {
@@ -95,7 +106,7 @@ class PlayFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun decideWinner(player: RockPaperScissors, computer: RockPaperScissors) {
         val winner = when {
             player == computer -> {
@@ -109,26 +120,39 @@ class PlayFragment : Fragment() {
             }
         }
 
-        binding.ivYou.setImageResource(getImageResource(player))
-        binding.ivComputer.setImageResource(getImageResource(computer))
-        binding.tvResult.setText(getResultString(winner))
+        binding.ivYou.setImageResource(getImageResource(player.ordinal))
+        binding.ivComputer.setImageResource(getImageResource(computer.ordinal))
+        binding.tvResult.setText(getResultString(winner.ordinal))
 
         Log.i("playFragmentGame", "player: $player, computer: $computer, winner $winner")
-    }
 
-    private fun getImageResource(rps: RockPaperScissors): Int {
-        return when (rps) {
-            RockPaperScissors.ROCK -> R.drawable.rock
-            RockPaperScissors.PAPER -> R.drawable.paper
-            RockPaperScissors.SCISSORS -> R.drawable.scissors
+        val game = RockPaperScissorsGame(
+            player = player.ordinal,
+            computer = player.ordinal,
+            winner = winner.ordinal,
+            date = now().toString()
+        )
+
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                rockPaperScissorsRepository.insertGame(game)
+            }
         }
     }
+}
 
-    private fun getResultString(winner: Winner): Int {
-        return when (winner) {
-            Winner.PLAYER -> R.string.you_win
-            Winner.DRAW -> R.string.draw
-            Winner.COMPUTER -> R.string.computer_wins
-        }
+fun getImageResource(rps: Int): Int {
+    return when (RockPaperScissors.values()[rps]) {
+        RockPaperScissors.ROCK -> R.drawable.rock
+        RockPaperScissors.PAPER -> R.drawable.paper
+        RockPaperScissors.SCISSORS -> R.drawable.scissors
+    }
+}
+
+private fun getResultString(winner: Int): Int {
+    return when (Winner.values()[winner]) {
+        Winner.PLAYER -> R.string.you_win
+        Winner.DRAW -> R.string.draw
+        Winner.COMPUTER -> R.string.computer_wins
     }
 }
