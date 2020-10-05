@@ -23,4 +23,7 @@
     <string name="v_s">V.S.</string>
     <string name="your_choice">your choice</string>
     <string name="computer_its_choice">computer its choice</string>
+    <string name="you_win">You win!</string>
+    <string name="draw">Draw!</string>
+    <string name="computer_wins">Computer wins!</string>
 </resources>
