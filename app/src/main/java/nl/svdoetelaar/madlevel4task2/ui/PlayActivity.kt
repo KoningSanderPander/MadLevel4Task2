@@ -2,7 +2,6 @@ package nl.svdoetelaar.madlevel4task2.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -43,7 +42,6 @@ class PlayActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        Log.d("task4level2", item.itemId.toString())
         return when (item.itemId) {
             R.id.history -> {
                 item.isVisible = false

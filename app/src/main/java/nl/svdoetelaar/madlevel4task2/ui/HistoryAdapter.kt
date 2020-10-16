@@ -6,8 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import nl.svdoetelaar.madlevel4task2.R
 import nl.svdoetelaar.madlevel4task2.databinding.FragmentGameHistoryBinding
-import nl.svdoetelaar.madlevel4task2.databinding.FragmentHistoryBinding
-import nl.svdoetelaar.madlevel4task2.model.RockPaperScissors
 import nl.svdoetelaar.madlevel4task2.model.RockPaperScissorsGame
 import nl.svdoetelaar.madlevel4task2.model.Winner
 

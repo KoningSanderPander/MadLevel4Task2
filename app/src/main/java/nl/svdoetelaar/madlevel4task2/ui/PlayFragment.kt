@@ -2,7 +2,6 @@ package nl.svdoetelaar.madlevel4task2.ui
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -123,7 +122,6 @@ class PlayFragment : Fragment() {
         binding.ivComputer.setImageResource(getImageResource(computer.ordinal))
         binding.tvResult.setText(getResultString(winner.ordinal))
 
-        Log.i("playFragmentGame", "player: $player, computer: $computer, winner $winner")
 
         val game = RockPaperScissorsGame(
             player = player.ordinal,
