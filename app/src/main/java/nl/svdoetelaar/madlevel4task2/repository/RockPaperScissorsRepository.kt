@@ -17,6 +17,15 @@ class RockPaperScissorsRepository(context: Context) {
     suspend fun getAllGames(): List<RockPaperScissorsGame> =
         rockPaperScissorsDao.getAllGames()
 
+    suspend fun getAllPlayerWins(): Int =
+        rockPaperScissorsDao.getAllPlayerWins()
+
+    suspend fun getAllDraws(): Int =
+        rockPaperScissorsDao.getAllDraws()
+
+    suspend fun getAllComputerWins(): Int =
+        rockPaperScissorsDao.getAllComputerWins()
+
 
     suspend fun insertGame(game: RockPaperScissorsGame) =
         rockPaperScissorsDao.insertGame(game)

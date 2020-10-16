@@ -48,10 +48,7 @@ class PlayFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        view.findViewById<Button>(R.id.button_first).setOnClickListener {
-//            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-//        }
+        rockPaperScissorsRepository = RockPaperScissorsRepository(requireContext())
 
         binding.ivRock.setOnClickListener { play(RockPaperScissors.ROCK) }
         binding.ivPaper.setOnClickListener { play(RockPaperScissors.PAPER) }
@@ -60,6 +57,8 @@ class PlayFragment : Fragment() {
         binding.ivYou.setOnLongClickListener { setCheat(GameMode.PLAYER) }
         binding.tvVS.setOnLongClickListener { setCheat(GameMode.DRAW) }
         binding.ivComputer.setOnLongClickListener { setCheat(GameMode.COMPUTER) }
+
+        updateStats()
     }
 
     private fun setCheat(gameMode: GameMode): Boolean {
@@ -128,7 +127,7 @@ class PlayFragment : Fragment() {
 
         val game = RockPaperScissorsGame(
             player = player.ordinal,
-            computer = player.ordinal,
+            computer = computer.ordinal,
             winner = winner.ordinal,
             date = now().toString()
         )
@@ -138,6 +137,32 @@ class PlayFragment : Fragment() {
                 rockPaperScissorsRepository.insertGame(game)
             }
         }
+
+        updateStats()
+    }
+
+    private fun updateStats() {
+
+        mainScope.launch {
+            val win = withContext(Dispatchers.IO) {
+                rockPaperScissorsRepository.getAllPlayerWins()
+            }
+            val draw = withContext(Dispatchers.IO) {
+                rockPaperScissorsRepository.getAllDraws()
+            }
+            val lose = withContext(Dispatchers.IO) {
+                rockPaperScissorsRepository.getAllComputerWins()
+            }
+            binding.tvStatistics.text = getString(
+                R.string.statistics,
+                win,
+                draw,
+                lose
+            )
+
+        }
+
+
     }
 }
 

@@ -1,21 +1,41 @@
 package nl.svdoetelaar.madlevel4task2.ui
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import kotlinx.android.synthetic.main.activity_play.*
 import nl.svdoetelaar.madlevel4task2.R
+import nl.svdoetelaar.madlevel4task2.databinding.ActivityPlayBinding
+
 
 class PlayActivity : AppCompatActivity() {
 
+    private lateinit var navController: NavController
+    private lateinit var binding: ActivityPlayBinding
+
+    private var selectedMenu = R.menu.menu_history
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_play)
+        binding = ActivityPlayBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setSupportActionBar(findViewById(R.id.toolbar))
+
+        toolbar.setNavigationOnClickListener {
+            startActivity(Intent(applicationContext, PlayActivity::class.java))
+            finish()
+        }
+
+        navController = findNavController(R.id.nav_host_fragment)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_history, menu)
+        menuInflater.inflate(selectedMenu, menu)
         return true
     }
 
@@ -23,8 +43,22 @@ class PlayActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        Log.d("task4level2", item.itemId.toString())
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.history -> {
+                item.isVisible = false
+                supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+                supportActionBar!!.setDisplayShowHomeEnabled(true)
+                selectedMenu = R.menu.menu_delete
+                onCreateOptionsMenu(toolbar.menu)
+                navController.navigate(
+                    R.id.action_playFragment_to_historyFragment
+                )
+
+
+                return true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
